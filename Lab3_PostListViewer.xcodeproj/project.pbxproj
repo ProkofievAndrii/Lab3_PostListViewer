@@ -9,21 +9,29 @@
 /* Begin PBXBuildFile section */
 		C698DB452B8A564700F427ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB442B8A564700F427ED /* AppDelegate.swift */; };
 		C698DB472B8A564700F427ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB462B8A564700F427ED /* SceneDelegate.swift */; };
-		C698DB492B8A564700F427ED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB482B8A564700F427ED /* ViewController.swift */; };
+		C698DB492B8A564700F427ED /* PostListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB482B8A564700F427ED /* PostListVC.swift */; };
 		C698DB4C2B8A564700F427ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C698DB4A2B8A564700F427ED /* Main.storyboard */; };
 		C698DB4E2B8A564800F427ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C698DB4D2B8A564800F427ED /* Assets.xcassets */; };
 		C698DB512B8A564800F427ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C698DB4F2B8A564800F427ED /* LaunchScreen.storyboard */; };
+		C698DB5A2B8A578500F427ED /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C698DB592B8A578500F427ED /* SDWebImage */; };
+		C698DB5C2B8A578500F427ED /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = C698DB5B2B8A578500F427ED /* SDWebImageMapKit */; };
+		C698DB5E2B8A57FC00F427ED /* PostDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB5D2B8A57FC00F427ED /* PostDetailsVC.swift */; };
+		C698DB642B8A5A5200F427ED /* PostViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB622B8A5A5200F427ED /* PostViewCell.swift */; };
+		C698DB652B8A5A5200F427ED /* PostViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C698DB632B8A5A5200F427ED /* PostViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C698DB412B8A564700F427ED /* Lab3_PostListViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lab3_PostListViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C698DB442B8A564700F427ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C698DB462B8A564700F427ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C698DB482B8A564700F427ED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C698DB482B8A564700F427ED /* PostListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListVC.swift; sourceTree = "<group>"; };
 		C698DB4B2B8A564700F427ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C698DB4D2B8A564800F427ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C698DB502B8A564800F427ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C698DB522B8A564800F427ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C698DB5D2B8A57FC00F427ED /* PostDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsVC.swift; sourceTree = "<group>"; };
+		C698DB622B8A5A5200F427ED /* PostViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewCell.swift; sourceTree = "<group>"; };
+		C698DB632B8A5A5200F427ED /* PostViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +39,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C698DB5C2B8A578500F427ED /* SDWebImageMapKit in Frameworks */,
+				C698DB5A2B8A578500F427ED /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,15 +66,42 @@
 		C698DB432B8A564700F427ED /* Lab3_PostListViewer */ = {
 			isa = PBXGroup;
 			children = (
+				C698DB612B8A58BA00F427ED /* PostCell */,
+				C698DB602B8A58A800F427ED /* PostDetails */,
+				C698DB5F2B8A589600F427ED /* PostList */,
 				C698DB442B8A564700F427ED /* AppDelegate.swift */,
 				C698DB462B8A564700F427ED /* SceneDelegate.swift */,
-				C698DB482B8A564700F427ED /* ViewController.swift */,
-				C698DB4A2B8A564700F427ED /* Main.storyboard */,
 				C698DB4D2B8A564800F427ED /* Assets.xcassets */,
 				C698DB4F2B8A564800F427ED /* LaunchScreen.storyboard */,
 				C698DB522B8A564800F427ED /* Info.plist */,
 			);
 			path = Lab3_PostListViewer;
+			sourceTree = "<group>";
+		};
+		C698DB5F2B8A589600F427ED /* PostList */ = {
+			isa = PBXGroup;
+			children = (
+				C698DB4A2B8A564700F427ED /* Main.storyboard */,
+				C698DB482B8A564700F427ED /* PostListVC.swift */,
+			);
+			path = PostList;
+			sourceTree = "<group>";
+		};
+		C698DB602B8A58A800F427ED /* PostDetails */ = {
+			isa = PBXGroup;
+			children = (
+				C698DB5D2B8A57FC00F427ED /* PostDetailsVC.swift */,
+			);
+			path = PostDetails;
+			sourceTree = "<group>";
+		};
+		C698DB612B8A58BA00F427ED /* PostCell */ = {
+			isa = PBXGroup;
+			children = (
+				C698DB622B8A5A5200F427ED /* PostViewCell.swift */,
+				C698DB632B8A5A5200F427ED /* PostViewCell.xib */,
+			);
+			path = PostCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +120,10 @@
 			dependencies = (
 			);
 			name = Lab3_PostListViewer;
+			packageProductDependencies = (
+				C698DB592B8A578500F427ED /* SDWebImage */,
+				C698DB5B2B8A578500F427ED /* SDWebImageMapKit */,
+			);
 			productName = Lab3_PostListViewer;
 			productReference = C698DB412B8A564700F427ED /* Lab3_PostListViewer.app */;
 			productType = "com.apple.product-type.application";
@@ -94,6 +135,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1520;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
@@ -111,6 +155,9 @@
 				Base,
 			);
 			mainGroup = C698DB382B8A564700F427ED;
+			packageReferences = (
+				C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = C698DB422B8A564700F427ED /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,6 +174,7 @@
 			files = (
 				C698DB512B8A564800F427ED /* LaunchScreen.storyboard in Resources */,
 				C698DB4E2B8A564800F427ED /* Assets.xcassets in Resources */,
+				C698DB652B8A5A5200F427ED /* PostViewCell.xib in Resources */,
 				C698DB4C2B8A564700F427ED /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,9 +186,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C698DB492B8A564700F427ED /* ViewController.swift in Sources */,
+				C698DB492B8A564700F427ED /* PostListVC.swift in Sources */,
 				C698DB452B8A564700F427ED /* AppDelegate.swift in Sources */,
+				C698DB5E2B8A57FC00F427ED /* PostDetailsVC.swift in Sources */,
 				C698DB472B8A564700F427ED /* SceneDelegate.swift in Sources */,
+				C698DB642B8A5A5200F427ED /* PostViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,9 +357,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "ua.edu.ukma.Prokofiev.Lab3-PostListViewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -335,9 +389,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "ua.edu.ukma.Prokofiev.Lab3-PostListViewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -363,6 +421,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.19.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C698DB592B8A578500F427ED /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		C698DB5B2B8A578500F427ED /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C698DB392B8A564700F427ED /* Project object */;
 }
