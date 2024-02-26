@@ -6,22 +6,76 @@
 //
 
 import UIKit
+import SDWebImage
 
 class PostDetailsVC: UIViewController {
 
-    @IBOutlet weak var dataLabel: UILabel!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var bookmarkImageView: UIImageView!
-    @IBOutlet weak var postImageView: UIImageView!
-    @IBOutlet weak var upsImageView: UIImageView!
-    @IBOutlet weak var upsLabel: UILabel!
-    @IBOutlet weak var commentsLabel: UILabel!
+    //MARK: - IBOutlets
+    @IBOutlet private weak var dataLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var bookmarkButton: UIButton!
+    @IBOutlet private weak var postImageView: UIImageView!
+    @IBOutlet private weak var ratingLabel: UILabel!
+    @IBOutlet private weak var commentsLabel: UILabel!
     
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-//    func config(with data: Int) {
-//        
-//    }
+    //MARK: - Actions
+    @IBAction func bookmarkButtonPressed(_ sender: UIButton) {
+        
+    }
+}
+
+//MARK: - UI management
+extension PostDetailsVC {
+    func adjustUIInfo(post: APIManager.RedditPost) {
+        adjustDataLabel(post.author_fullname, post.created_utc, post.domain)
+        adjustTitleLabel(post.title)
+        adjustRatingLabel(post.ups, post.downs)
+        adjustCommentLabel(post.num_comments)
+        adjustBookmarkButton(post.saved)
+        adjustImageView(post.url_overridden_by_dest)
+    }
+    
+    private func adjustDataLabel(_ nickname: String?, _ createdInterval: TimeInterval, _ domain: String) {
+        let currentDate = Date()
+        let timePassedSincePosted = currentDate.addingTimeInterval(-createdInterval)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh"
+        dateFormatter.timeZone = TimeZone.current
+        let formattedDate = dateFormatter.string(from: timePassedSincePosted)
+        
+        let labelText = "u/\(nickname ?? "Unknown") · \(formattedDate)h · \(domain)"
+        self.dataLabel.text = labelText
+    }
+    
+    private func adjustTitleLabel(_ title: String) {
+        self.titleLabel.text = title
+        self.titleLabel.numberOfLines = 1 + title.count / 42
+    }
+    
+    private func adjustRatingLabel(_ ups: Int, _ downs: Int) {
+        let rating = ups - downs
+        self.ratingLabel.text = "\(rating)"
+    }
+    
+    private func adjustCommentLabel(_ comments: Int) {
+        self.commentsLabel.text = "\(comments)"
+    }
+    
+    private func adjustBookmarkButton(_ isSaved: Bool) {
+        let systemName = (isSaved) ? "bookmark.fill" : "bookmark"
+        bookmarkButton.setImage(UIImage(systemName: systemName), for: .normal)
+    }
+    
+    private func adjustImageView(_ url: URL?) {
+        if url != nil {
+            DispatchQueue.main.async {
+                self.postImageView.sd_setImage(with: url)
+            }
+        } else { self.postImageView.image = UIImage(named: "image_placeholder") }
+    }
 }

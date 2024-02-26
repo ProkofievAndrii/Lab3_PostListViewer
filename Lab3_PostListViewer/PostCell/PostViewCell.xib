@@ -23,7 +23,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="rAA-1V-geB">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="rAA-1V-geB">
                         <rect key="frame" x="367" y="6.3333333333333304" width="25" height="22.666666666666671"/>
                         <color key="tintColor" name="color_accent"/>
                         <constraints>
@@ -41,7 +41,7 @@
                         <rect key="frame" x="0.0" y="65" width="400" height="250"/>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iem-ab-zIg">
-                        <rect key="frame" x="12" y="325" width="94.333333333333329" height="25"/>
+                        <rect key="frame" x="15" y="325" width="94.333333333333329" height="25"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrowshape.up.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="c8X-xN-5aJ">
                                 <rect key="frame" x="0.0" y="0.33333333333333215" width="25" height="24.666666666666668"/>
@@ -80,12 +80,13 @@
                     </stackView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SoR-4S-4aO">
                         <rect key="frame" x="293" y="320" width="97" height="35"/>
+                        <color key="tintColor" name="color_accent"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system" title=" Share"/>
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="iem-ab-zIg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="1EY-jo-wXQ"/>
+                    <constraint firstItem="iem-ab-zIg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="1EY-jo-wXQ"/>
                     <constraint firstAttribute="trailing" secondItem="rAA-1V-geB" secondAttribute="trailing" constant="8" id="1Ir-Lz-LA3"/>
                     <constraint firstItem="HNm-cd-tU2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="2DQ-5X-VHF"/>
                     <constraint firstItem="MUZ-xy-144" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="342-5c-wgV"/>
@@ -115,17 +116,16 @@
                 <outlet property="commentLabel" destination="O35-Bh-K1G" id="22s-yD-tUy"/>
                 <outlet property="dataLabel" destination="RVh-R1-3ez" id="ktA-vO-gM1"/>
                 <outlet property="postImageView" destination="HNm-cd-tU2" id="Ywt-bQ-n7u"/>
+                <outlet property="ratingLabel" destination="Uoi-Re-S14" id="aXh-Tz-odt"/>
                 <outlet property="shareButton" destination="SoR-4S-4aO" id="DZ9-oP-zXF"/>
                 <outlet property="titleLabel" destination="MUZ-xy-144" id="8hJ-dk-n1Z"/>
-                <outlet property="upsImageView" destination="c8X-xN-5aJ" id="yVD-pk-loD"/>
-                <outlet property="upsLabel" destination="Uoi-Re-S14" id="aXh-Tz-odt"/>
             </connections>
             <point key="canvasLocation" x="200" y="-91.549295774647888"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="arrowshape.up.fill" catalog="system" width="123" height="128"/>
-        <image name="bookmark.fill" catalog="system" width="110" height="128"/>
+        <image name="bookmark" catalog="system" width="110" height="128"/>
         <image name="bubble.fill" catalog="system" width="128" height="110"/>
         <image name="image_placeholder" width="681" height="528"/>
         <image name="square.and.arrow.up" catalog="system" width="108" height="128"/>

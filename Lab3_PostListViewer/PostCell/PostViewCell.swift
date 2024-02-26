@@ -13,8 +13,7 @@ class PostViewCell: UITableViewCell {
     @IBOutlet weak var bookmarkImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var postImageView: UIImageView!
-    @IBOutlet weak var upsImageView: UIImageView!
-    @IBOutlet weak var upsLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
     @IBOutlet weak var shareButton: UIButton!
     
@@ -26,7 +25,14 @@ class PostViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-//    func config(with data: Int) {
-//        self.inputViewController?.performSegue(withIdentifier: <#T##String#>, sender: <#T##Any?#>)
-//    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        dataLabel.text = nil
+        bookmarkImage.image = nil
+        titleLabel.text = nil
+        postImageView.image = nil
+        ratingLabel.text = nil
+        commentLabel.text = nil
+    }
 }

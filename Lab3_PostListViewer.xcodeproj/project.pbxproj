@@ -7,17 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C62229EB2B8BEDF20025AC99 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C62229EA2B8BEDF20025AC99 /* SDWebImage */; };
+		C62229ED2B8BEDF20025AC99 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = C62229EC2B8BEDF20025AC99 /* SDWebImageMapKit */; };
 		C698DB452B8A564700F427ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB442B8A564700F427ED /* AppDelegate.swift */; };
 		C698DB472B8A564700F427ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB462B8A564700F427ED /* SceneDelegate.swift */; };
 		C698DB492B8A564700F427ED /* PostListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB482B8A564700F427ED /* PostListVC.swift */; };
 		C698DB4C2B8A564700F427ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C698DB4A2B8A564700F427ED /* Main.storyboard */; };
 		C698DB4E2B8A564800F427ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C698DB4D2B8A564800F427ED /* Assets.xcassets */; };
 		C698DB512B8A564800F427ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C698DB4F2B8A564800F427ED /* LaunchScreen.storyboard */; };
-		C698DB5A2B8A578500F427ED /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C698DB592B8A578500F427ED /* SDWebImage */; };
-		C698DB5C2B8A578500F427ED /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = C698DB5B2B8A578500F427ED /* SDWebImageMapKit */; };
 		C698DB5E2B8A57FC00F427ED /* PostDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB5D2B8A57FC00F427ED /* PostDetailsVC.swift */; };
 		C698DB642B8A5A5200F427ED /* PostViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB622B8A5A5200F427ED /* PostViewCell.swift */; };
 		C698DB652B8A5A5200F427ED /* PostViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C698DB632B8A5A5200F427ED /* PostViewCell.xib */; };
+		C6EC9D6D2B8BB6E800A11DD5 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC9D6C2B8BB6E800A11DD5 /* APIManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		C698DB5D2B8A57FC00F427ED /* PostDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsVC.swift; sourceTree = "<group>"; };
 		C698DB622B8A5A5200F427ED /* PostViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewCell.swift; sourceTree = "<group>"; };
 		C698DB632B8A5A5200F427ED /* PostViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostViewCell.xib; sourceTree = "<group>"; };
+		C6EC9D6C2B8BB6E800A11DD5 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,8 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C698DB5C2B8A578500F427ED /* SDWebImageMapKit in Frameworks */,
-				C698DB5A2B8A578500F427ED /* SDWebImage in Frameworks */,
+				C62229ED2B8BEDF20025AC99 /* SDWebImageMapKit in Frameworks */,
+				C62229EB2B8BEDF20025AC99 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +71,7 @@
 				C698DB612B8A58BA00F427ED /* PostCell */,
 				C698DB602B8A58A800F427ED /* PostDetails */,
 				C698DB5F2B8A589600F427ED /* PostList */,
+				C6EC9D6C2B8BB6E800A11DD5 /* APIManager.swift */,
 				C698DB442B8A564700F427ED /* AppDelegate.swift */,
 				C698DB462B8A564700F427ED /* SceneDelegate.swift */,
 				C698DB4D2B8A564800F427ED /* Assets.xcassets */,
@@ -121,8 +124,8 @@
 			);
 			name = Lab3_PostListViewer;
 			packageProductDependencies = (
-				C698DB592B8A578500F427ED /* SDWebImage */,
-				C698DB5B2B8A578500F427ED /* SDWebImageMapKit */,
+				C62229EA2B8BEDF20025AC99 /* SDWebImage */,
+				C62229EC2B8BEDF20025AC99 /* SDWebImageMapKit */,
 			);
 			productName = Lab3_PostListViewer;
 			productReference = C698DB412B8A564700F427ED /* Lab3_PostListViewer.app */;
@@ -156,7 +159,7 @@
 			);
 			mainGroup = C698DB382B8A564700F427ED;
 			packageReferences = (
-				C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				C62229E92B8BEDF20025AC99 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = C698DB422B8A564700F427ED /* Products */;
 			projectDirPath = "";
@@ -186,6 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6EC9D6D2B8BB6E800A11DD5 /* APIManager.swift in Sources */,
 				C698DB492B8A564700F427ED /* PostListVC.swift in Sources */,
 				C698DB452B8A564700F427ED /* AppDelegate.swift in Sources */,
 				C698DB5E2B8A57FC00F427ED /* PostDetailsVC.swift in Sources */,
@@ -423,7 +427,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+		C62229E92B8BEDF20025AC99 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
 			requirement = {
@@ -434,14 +438,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C698DB592B8A578500F427ED /* SDWebImage */ = {
+		C62229EA2B8BEDF20025AC99 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			package = C62229E92B8BEDF20025AC99 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
 		};
-		C698DB5B2B8A578500F427ED /* SDWebImageMapKit */ = {
+		C62229EC2B8BEDF20025AC99 /* SDWebImageMapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C698DB582B8A578500F427ED /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			package = C62229E92B8BEDF20025AC99 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImageMapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
