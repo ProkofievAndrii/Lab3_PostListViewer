@@ -9,8 +9,9 @@ import Foundation
 
 class APIManager {
     
-    static var posts: [RedditPost] = []
-    static var lastCelectedPost: APIManager.RedditPost?
+    static var livePosts: [RedditPost] = []
+    static var defaultPosts: [RedditPost] = []
+    static var lastCelectedPosition: Int?
     
     struct RedditResponse: Codable {
         let kind: String
@@ -30,12 +31,13 @@ class APIManager {
         let author_fullname: String?
         let created_utc: TimeInterval
         let domain: String
-        let saved: Bool
+        var saved: Bool
         let title: String
         let ups: Int
         let downs: Int
         let num_comments: Int
         let url_overridden_by_dest: URL?
+        let permalink: String
     }
     
     func fetchData(_ subreddit: String, _ limit: Int, _ after: String?, completion: @escaping ([RedditPost]?) -> Void) {

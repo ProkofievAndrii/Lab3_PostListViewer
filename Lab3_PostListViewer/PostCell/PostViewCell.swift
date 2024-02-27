@@ -10,7 +10,7 @@ import UIKit
 class PostViewCell: UITableViewCell {
 
     @IBOutlet weak var dataLabel: UILabel!
-    @IBOutlet weak var bookmarkImage: UIImageView!
+    @IBOutlet weak var bookmarkImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var postImageView: UIImageView!
     @IBOutlet weak var ratingLabel: UILabel!
@@ -29,7 +29,7 @@ class PostViewCell: UITableViewCell {
         super.prepareForReuse()
 
         dataLabel.text = nil
-        bookmarkImage.image = nil
+        bookmarkImageView.image = nil
         titleLabel.text = nil
         postImageView.image = nil
         ratingLabel.text = nil

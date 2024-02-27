@@ -66,6 +66,9 @@
                                 <buttonConfiguration key="configuration" style="plain" image="bookmark" catalog="system"/>
                             </button>
                             <color key="tintColor" name="color_accent"/>
+                            <connections>
+                                <action selector="filterButtonPressed:" destination="07h-er-Vxa" id="hOp-vt-yRj"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -90,7 +93,7 @@
                                 <rect key="frame" x="10" y="290" width="373" height="341"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="dataLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="084-R9-cL2">
-                                        <rect key="frame" x="8" y="7.9999999999999982" width="324" height="19.333333333333329"/>
+                                        <rect key="frame" x="8" y="7.9999999999999982" width="327" height="19.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -146,16 +149,22 @@
                                         <rect key="frame" x="268" y="301" width="97" height="35"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system" title=" Share"/>
+                                        <connections>
+                                            <action selector="shareButtonPressed:" destination="HMS-Hv-Pkk" eventType="touchUpInside" id="hsT-XX-h8S"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dUY-CB-295">
-                                        <rect key="frame" x="340" y="8" width="25" height="23"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dUY-CB-295">
+                                        <rect key="frame" x="343" y="5" width="25" height="26"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="OeI-Jw-ZiY"/>
-                                            <constraint firstAttribute="height" constant="23" id="PKO-Ed-P6F"/>
+                                            <constraint firstAttribute="height" constant="26" id="PKO-Ed-P6F"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="tintColor" name="AccentColor"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="bookmark" catalog="system"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="bookmark" catalog="system">
+                                            <color key="titleColor" name="AccentColor"/>
+                                        </state>
                                         <connections>
                                             <action selector="bookmarkButtonPressed:" destination="HMS-Hv-Pkk" eventType="touchUpInside" id="BJ4-Vb-25Z"/>
                                         </connections>
@@ -170,13 +179,13 @@
                                     <constraint firstAttribute="trailing" secondItem="6nI-rt-9vj" secondAttribute="trailing" id="JIA-cX-46p"/>
                                     <constraint firstItem="Jrs-Wf-cWn" firstAttribute="top" secondItem="6nI-rt-9vj" secondAttribute="bottom" constant="10" id="K8p-kx-Yhm"/>
                                     <constraint firstItem="084-R9-cL2" firstAttribute="top" secondItem="Zat-yV-HTg" secondAttribute="top" constant="8" id="KTH-yT-VaY"/>
-                                    <constraint firstItem="dUY-CB-295" firstAttribute="top" secondItem="Zat-yV-HTg" secondAttribute="top" constant="8" id="LKm-yw-wjy"/>
+                                    <constraint firstItem="dUY-CB-295" firstAttribute="top" secondItem="Zat-yV-HTg" secondAttribute="top" constant="5" id="LKm-yw-wjy"/>
                                     <constraint firstItem="6nI-rt-9vj" firstAttribute="top" secondItem="4HV-tn-tGc" secondAttribute="bottom" constant="5" id="Msx-uu-ViQ"/>
                                     <constraint firstAttribute="bottom" secondItem="iVx-jM-3uT" secondAttribute="bottom" constant="10" id="NPT-44-eA2"/>
                                     <constraint firstAttribute="width" secondItem="Zat-yV-HTg" secondAttribute="height" multiplier="197:180" id="QRR-hH-alV"/>
                                     <constraint firstItem="4HV-tn-tGc" firstAttribute="top" secondItem="084-R9-cL2" secondAttribute="bottom" constant="8" id="RVe-q2-HCe"/>
                                     <constraint firstItem="iVx-jM-3uT" firstAttribute="centerX" secondItem="Zat-yV-HTg" secondAttribute="centerX" id="UZg-Z9-ZYG"/>
-                                    <constraint firstAttribute="trailing" secondItem="dUY-CB-295" secondAttribute="trailing" constant="8" id="d26-8Y-m2A"/>
+                                    <constraint firstAttribute="trailing" secondItem="dUY-CB-295" secondAttribute="trailing" constant="5" id="d26-8Y-m2A"/>
                                     <constraint firstItem="Jrs-Wf-cWn" firstAttribute="leading" secondItem="Zat-yV-HTg" secondAttribute="leading" constant="15" id="enS-BK-MEp"/>
                                     <constraint firstItem="k5C-jD-3ev" firstAttribute="top" secondItem="6nI-rt-9vj" secondAttribute="bottom" constant="5" id="fD5-iD-WhK"/>
                                     <constraint firstAttribute="trailing" secondItem="4HV-tn-tGc" secondAttribute="trailing" constant="8" id="fWm-n3-fMp"/>
@@ -223,6 +232,7 @@
                         <outlet property="dataLabel" destination="084-R9-cL2" id="WPN-gY-Yxz"/>
                         <outlet property="postImageView" destination="6nI-rt-9vj" id="Hlk-qm-QJZ"/>
                         <outlet property="ratingLabel" destination="k0U-cX-j3h" id="eQA-Em-SA4"/>
+                        <outlet property="shareButton" destination="k5C-jD-3ev" id="MwI-JP-3kk"/>
                         <outlet property="titleLabel" destination="4HV-tn-tGc" id="NRt-Y3-UGc"/>
                     </connections>
                 </viewController>

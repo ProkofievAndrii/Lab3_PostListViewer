@@ -17,21 +17,44 @@ class PostDetailsVC: UIViewController {
     @IBOutlet private weak var postImageView: UIImageView!
     @IBOutlet private weak var ratingLabel: UILabel!
     @IBOutlet private weak var commentsLabel: UILabel!
+    @IBOutlet private weak var shareButton: UIButton!
     
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
+    //MARK: - Variables
+    private var isSaved: Bool = false
+    private var position: Int = 0
+    
     //MARK: - Actions
     @IBAction func bookmarkButtonPressed(_ sender: UIButton) {
-        
+        if self.isSaved {
+            bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
+            isSaved = false
+        } else {
+            bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+            isSaved = true
+        }
+        print(APIManager.livePosts[position].title)
+        APIManager.livePosts[position].saved = isSaved
+    }
+    
+    @IBAction func shareButtonPressed(_ sender: UIButton) {
+        let permalink = "reddit.com\(APIManager.livePosts[position].permalink)"
+        let activityViewController = UIActivityViewController(activityItems: [permalink as Any], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
     }
 }
 
 //MARK: - UI management
 extension PostDetailsVC {
-    func adjustUIInfo(post: APIManager.RedditPost) {
+    func adjustUIInfo(using position: Int?) {
+        let post = APIManager.livePosts[position ?? 0]
+        isSaved = post.saved
+        self.position = position ?? 0
+        
         adjustDataLabel(post.author_fullname, post.created_utc, post.domain)
         adjustTitleLabel(post.title)
         adjustRatingLabel(post.ups, post.downs)

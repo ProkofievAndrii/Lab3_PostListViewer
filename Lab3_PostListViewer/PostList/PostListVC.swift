@@ -25,7 +25,9 @@ class PostListVC: UIViewController {
         static let limit = 10
         static var after: String? = nil
     }
-    var loadingNewPosts = false
+    private var loadingNewPosts = false
+    private var showingDefaultPosts = false
+    
     
     //MARK: - Life cycle
     override func viewDidLoad() {
@@ -37,15 +39,27 @@ class PostListVC: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        postTableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
+    //MARK: - Actions
+    @IBAction func filterButtonPressed(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    
     //MARK: - Paging
     func loadNextPage() async {
         loadingNewPosts = true
         APIManager.apiManager.fetchData(APIParams.subreddit, APIParams.limit, APIParams.after) { posts in
             if let posts = posts {
-                APIManager.posts.append(contentsOf: posts)
-                for post in posts {
-                    print(post.title)
-                }
+                APIManager.livePosts.append(contentsOf: posts)
                 DispatchQueue.main.async {
                     self.postTableView.reloadData()
                     self.loadingNewPosts = false
@@ -61,13 +75,13 @@ class PostListVC: UIViewController {
         case Const.detailsSegueID:
             let nextVC = segue.destination as! PostDetailsVC
             DispatchQueue.main.async {
-                nextVC.adjustUIInfo(post: APIManager.lastCelectedPost ?? APIManager.posts[0])
+                nextVC.adjustUIInfo(using: APIManager.lastCelectedPosition ?? 0)
             }
         default: break
         }
     }
     
-    //MARK: - Table configuration functions
+    //MARK: - Table/Cell configuration functions
     private func configTableView() {
         postTableView.dataSource = self
         postTableView.delegate = self
@@ -81,24 +95,21 @@ class PostListVC: UIViewController {
         cell.ratingLabel.text = placeholderText
         cell.commentLabel.text = placeholderText
         cell.postImageView.image = UIImage(named: "image_placeholder")
+        cell.bookmarkImageView.image = UIImage(systemName: "bookmark")
         return cell
     }
     
     private func configureCompleteCell(_ cell: PostViewCell, row: Int) -> PostViewCell {
-        let currPost = APIManager.posts[row]
-        let currentDate = Date()
-        let timePassedSincePosted = currentDate.addingTimeInterval(-currPost.created_utc)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh"
-        dateFormatter.timeZone = TimeZone.current
-        let formattedDate = dateFormatter.string(from: timePassedSincePosted)
+        let currPost = APIManager.livePosts[row]
         
-        let labelText = "u/\(currPost.author_fullname ?? "Unknown") · \(formattedDate)h · \(currPost.domain)"
-        cell.dataLabel.text = labelText
+        let formattedDate = configureCorrectDate(interval: currPost.created_utc)
+        let dataLabelText = "u/\(currPost.author_fullname ?? "Unknown") · \(formattedDate)h · \(currPost.domain)"
+        cell.dataLabel.text = dataLabelText
         cell.titleLabel.text = "\(currPost.title)"
         cell.ratingLabel.text = "\(currPost.ups - currPost.downs)"
         cell.commentLabel.text = "\(currPost.num_comments)"
-        
+        let bookmarkImage = currPost.saved ? "bookmark.fill" : "bookmark"
+        cell.bookmarkImageView.image = UIImage(systemName: bookmarkImage)
         let url = currPost.url_overridden_by_dest
         if url != nil {
             DispatchQueue.main.async {
@@ -109,12 +120,22 @@ class PostListVC: UIViewController {
         }
         return cell;
     }
+    
+    private func configureCorrectDate(interval: TimeInterval) -> String{
+        let currentDate = Date()
+        let timePassedSincePosted = currentDate.addingTimeInterval(-interval)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh"
+        dateFormatter.timeZone = TimeZone.current
+        let formattedDate = dateFormatter.string(from: timePassedSincePosted)
+        return "\(formattedDate)"
+    }
 }
 
 //MARK: - UITableViewDataSource
 extension PostListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return APIManager.posts.count;
+        return APIManager.livePosts.count;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -123,7 +144,7 @@ extension PostListVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = postTableView.dequeueReusableCell(withIdentifier: Const.cellReuseId, for: indexPath) as! PostViewCell
-        if APIManager.posts.isEmpty { cell = configureDefaultCell(cell) }
+        if APIManager.livePosts.isEmpty { cell = configureDefaultCell(cell) }
         else { cell = configureCompleteCell(cell, row: indexPath.row) }
         return cell;
     }
@@ -132,7 +153,7 @@ extension PostListVC: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 extension PostListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        APIManager.lastCelectedPost = APIManager.posts[indexPath.row]
+        APIManager.lastCelectedPosition = indexPath.row
         self.performSegue(withIdentifier: Const.detailsSegueID, sender: nil)
     }
     

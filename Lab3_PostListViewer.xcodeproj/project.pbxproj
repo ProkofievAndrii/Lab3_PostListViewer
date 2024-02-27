@@ -18,6 +18,7 @@
 		C698DB5E2B8A57FC00F427ED /* PostDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB5D2B8A57FC00F427ED /* PostDetailsVC.swift */; };
 		C698DB642B8A5A5200F427ED /* PostViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C698DB622B8A5A5200F427ED /* PostViewCell.swift */; };
 		C698DB652B8A5A5200F427ED /* PostViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C698DB632B8A5A5200F427ED /* PostViewCell.xib */; };
+		C6B8846F2B8E7042003875B9 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B8846E2B8E7042003875B9 /* UserDefaults.swift */; };
 		C6EC9D6D2B8BB6E800A11DD5 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC9D6C2B8BB6E800A11DD5 /* APIManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		C698DB5D2B8A57FC00F427ED /* PostDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsVC.swift; sourceTree = "<group>"; };
 		C698DB622B8A5A5200F427ED /* PostViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewCell.swift; sourceTree = "<group>"; };
 		C698DB632B8A5A5200F427ED /* PostViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostViewCell.xib; sourceTree = "<group>"; };
+		C6B8846E2B8E7042003875B9 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		C6EC9D6C2B8BB6E800A11DD5 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,10 +70,10 @@
 		C698DB432B8A564700F427ED /* Lab3_PostListViewer */ = {
 			isa = PBXGroup;
 			children = (
+				C6B8846D2B8E7023003875B9 /* Utilities */,
 				C698DB612B8A58BA00F427ED /* PostCell */,
 				C698DB602B8A58A800F427ED /* PostDetails */,
 				C698DB5F2B8A589600F427ED /* PostList */,
-				C6EC9D6C2B8BB6E800A11DD5 /* APIManager.swift */,
 				C698DB442B8A564700F427ED /* AppDelegate.swift */,
 				C698DB462B8A564700F427ED /* SceneDelegate.swift */,
 				C698DB4D2B8A564800F427ED /* Assets.xcassets */,
@@ -105,6 +107,15 @@
 				C698DB632B8A5A5200F427ED /* PostViewCell.xib */,
 			);
 			path = PostCell;
+			sourceTree = "<group>";
+		};
+		C6B8846D2B8E7023003875B9 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C6EC9D6C2B8BB6E800A11DD5 /* APIManager.swift */,
+				C6B8846E2B8E7042003875B9 /* UserDefaults.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +203,7 @@
 				C6EC9D6D2B8BB6E800A11DD5 /* APIManager.swift in Sources */,
 				C698DB492B8A564700F427ED /* PostListVC.swift in Sources */,
 				C698DB452B8A564700F427ED /* AppDelegate.swift in Sources */,
+				C6B8846F2B8E7042003875B9 /* UserDefaults.swift in Sources */,
 				C698DB5E2B8A57FC00F427ED /* PostDetailsVC.swift in Sources */,
 				C698DB472B8A564700F427ED /* SceneDelegate.swift in Sources */,
 				C698DB642B8A5A5200F427ED /* PostViewCell.swift in Sources */,
