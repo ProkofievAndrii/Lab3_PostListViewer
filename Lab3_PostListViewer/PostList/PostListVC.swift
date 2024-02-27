@@ -21,26 +21,39 @@ class PostListVC: UIViewController {
     
     //MARK: - Values & parameters
     struct APIParams {
-        static let subreddit = "ios"
-        static let limit = 20
+        static let subreddit = "deadbydaylight"
+        static let limit = 10
         static var after: String? = nil
     }
+    var loadingNewPosts = false
     
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configTableView()
         self.navigationItem.title = "r/\(APIParams.subreddit)"
-
+        Task {
+            await loadNextPage()
+        }
+    }
+    
+    //MARK: - Paging
+    func loadNextPage() async {
+        loadingNewPosts = true
         APIManager.apiManager.fetchData(APIParams.subreddit, APIParams.limit, APIParams.after) { posts in
             if let posts = posts {
-                APIManager.posts = posts
+                APIManager.posts.append(contentsOf: posts)
+                for post in posts {
+                    print(post.title)
+                }
                 DispatchQueue.main.async {
                     self.postTableView.reloadData()
+                    self.loadingNewPosts = false
                 }
             } else { print("Failed to fetch posts") }
         }
     }
+
     
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -101,7 +114,7 @@ class PostListVC: UIViewController {
 //MARK: - UITableViewDataSource
 extension PostListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return APIParams.limit;
+        return APIManager.posts.count;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -121,5 +134,16 @@ extension PostListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         APIManager.lastCelectedPost = APIManager.posts[indexPath.row]
         self.performSegue(withIdentifier: Const.detailsSegueID, sender: nil)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset_Y = scrollView.contentOffset.y
+        let height = scrollView.contentSize.height
+        
+        if offset_Y >= height - 330*4 && !loadingNewPosts {
+            Task {
+                await loadNextPage()
+            }
+        }
     }
 }
