@@ -58,21 +58,15 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Yl9-sE-TiA">
-                        <barButtonItem key="rightBarButtonItem" id="bSU-Wn-PYC">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Fsf-uW-AK2">
-                                <rect key="frame" x="330" y="4.6666666666666679" width="47" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="bookmark" catalog="system"/>
-                            </button>
-                            <color key="tintColor" name="color_accent"/>
+                        <barButtonItem key="rightBarButtonItem" image="bookmark.fill" catalog="system" id="U1C-lf-nga">
+                            <color key="tintColor" systemColor="linkColor"/>
                             <connections>
-                                <action selector="filterButtonPressed:" destination="07h-er-Vxa" id="hOp-vt-yRj"/>
+                                <action selector="filterButtonPressed:" destination="07h-er-Vxa" id="J9o-ij-zDg"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="bookmarkFilterButton" destination="bSU-Wn-PYC" id="OEw-Sk-iaK"/>
+                        <outlet property="bookmarkFilterButton" destination="U1C-lf-nga" id="p5u-nd-ACx"/>
                         <outlet property="postTableView" destination="M1Q-6h-iPo" id="819-Hm-kT4"/>
                         <segue destination="HMS-Hv-Pkk" kind="show" identifier="post_details_segue" id="Rcb-Km-bzH"/>
                     </connections>
@@ -244,6 +238,7 @@
     <resources>
         <image name="arrowshape.up.fill" catalog="system" width="123" height="128"/>
         <image name="bookmark" catalog="system" width="110" height="128"/>
+        <image name="bookmark.fill" catalog="system" width="110" height="128"/>
         <image name="bubble.fill" catalog="system" width="128" height="110"/>
         <image name="image_placeholder" width="681" height="528"/>
         <image name="square.and.arrow.up" catalog="system" width="108" height="128"/>
@@ -256,6 +251,9 @@
         <namedColor name="color_background">
             <color red="0.94900000095367432" green="0.94900000095367432" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

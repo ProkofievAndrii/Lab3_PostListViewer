@@ -8,35 +8,36 @@
 import UIKit
 
 class PostListVC: UIViewController {
-
-    //MARK: - Outlet
+    
+    //MARK: - Outlets
     @IBOutlet private weak var postTableView: UITableView!
     @IBOutlet private weak var bookmarkFilterButton: UIBarButtonItem!
     
-    //MARK: - Constants
+    //MARK: - Constants and parameters
+    
+    //Constants used in navigation
     struct Const {
         static let cellReuseId = "post_view_cell"
         static let detailsSegueID = "post_details_segue"
     }
     
-    //MARK: - Values & parameters
+    //Parameters used in API data fetching
     struct APIParams {
         static let subreddit = "deadbydaylight"
         static let limit = 10
         static var after: String? = nil
     }
-    private var loadingNewPosts = false
-    private var showingDefaultPosts = false
     
+    //MARK: - Variables
+    private var currentlyLoadingNewPosts = false
+    private var showingDefaultPosts = true
     
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configTableView()
-        self.navigationItem.title = "r/\(APIParams.subreddit)"
-        Task {
-            await loadNextPage()
-        }
+//        UserDefaultsManager.loadDefaultPosts()
+        APIManager.loadNewPosts(APIParams.subreddit, APIParams.limit, APIParams.after)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,28 +47,37 @@ class PostListVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+//        UserDefaultsManager.saveDefaultPosts()
     }
     
     //MARK: - Actions
-    @IBAction func filterButtonPressed(_ sender: UIBarButtonItem) {
+    @IBAction func filterButtonPressed(_ sender: Any) {
+        guard !currentlyLoadingNewPosts else { return }
         
+        //Filter button image updates
+        if showingDefaultPosts {
+            bookmarkFilterButton.image = UIImage(systemName: "bookmark")
+            showingDefaultPosts = false
+        } else {
+            bookmarkFilterButton.image = UIImage(systemName: "bookmark.fill")
+            showingDefaultPosts = true
+        }
+        //Reloading table view using dufferent data array
+        postTableView.reloadData()
     }
     
     
     //MARK: - Paging
-    func loadNextPage() async {
-        loadingNewPosts = true
-        APIManager.apiManager.fetchData(APIParams.subreddit, APIParams.limit, APIParams.after) { posts in
-            if let posts = posts {
-                APIManager.livePosts.append(contentsOf: posts)
-                DispatchQueue.main.async {
-                    self.postTableView.reloadData()
-                    self.loadingNewPosts = false
-                }
-            } else { print("Failed to fetch posts") }
+    func loadNewPage() async {
+        currentlyLoadingNewPosts = true
+        //Load new portion of posts and save in an array
+        APIManager.loadNewPosts(APIParams.subreddit, APIParams.limit, APIParams.after)
+        DispatchQueue.main.async {
+            //Reload table view using updateddata
+            self.postTableView.reloadData()
+            self.currentlyLoadingNewPosts = false
         }
     }
-
     
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -75,7 +85,7 @@ class PostListVC: UIViewController {
         case Const.detailsSegueID:
             let nextVC = segue.destination as! PostDetailsVC
             DispatchQueue.main.async {
-                nextVC.adjustUIInfo(using: APIManager.lastCelectedPosition ?? 0)
+                nextVC.adjustUIInfo(using: APIManager.lastCelectedPost!, self.showingDefaultPosts)
             }
         default: break
         }
@@ -86,6 +96,7 @@ class PostListVC: UIViewController {
         postTableView.dataSource = self
         postTableView.delegate = self
         postTableView.register(UINib(nibName: "PostViewCell", bundle: nil), forCellReuseIdentifier: Const.cellReuseId)
+        self.navigationItem.title = "r/\(APIParams.subreddit)"
     }
     
     private func configureDefaultCell(_ cell: PostViewCell) -> PostViewCell {
@@ -100,8 +111,17 @@ class PostListVC: UIViewController {
     }
     
     private func configureCompleteCell(_ cell: PostViewCell, row: Int) -> PostViewCell {
-        let currPost = APIManager.livePosts[row]
+        //Defining current post
+        var currPost: APIManager.RedditPost
+        if showingDefaultPosts {
+            currPost = APIManager.defaultPosts[row]
+            APIManager.defaultPosts[row].defaultPosition = row
+        } else {
+            currPost = APIManager.livePosts[row]
+            APIManager.livePosts[row].livePosition = row
+        }
         
+        //labels configauration
         let formattedDate = configureCorrectDate(interval: currPost.created_utc)
         let dataLabelText = "u/\(currPost.author_fullname ?? "Unknown") · \(formattedDate)h · \(currPost.domain)"
         cell.dataLabel.text = dataLabelText
@@ -109,18 +129,18 @@ class PostListVC: UIViewController {
         cell.ratingLabel.text = "\(currPost.ups - currPost.downs)"
         cell.commentLabel.text = "\(currPost.num_comments)"
         let bookmarkImage = currPost.saved ? "bookmark.fill" : "bookmark"
+        //images configuration
         cell.bookmarkImageView.image = UIImage(systemName: bookmarkImage)
         let url = currPost.url_overridden_by_dest
         if url != nil {
             DispatchQueue.main.async {
                 cell.postImageView.sd_setImage(with: url)
             }
-        } else {
-            cell.postImageView.image = UIImage(named: "image_placeholder")
-        }
+        } else { cell.postImageView.image = UIImage(named: "image_placeholder") }
         return cell;
     }
     
+    //Util function to format post date
     private func configureCorrectDate(interval: TimeInterval) -> String{
         let currentDate = Date()
         let timePassedSincePosted = currentDate.addingTimeInterval(-interval)
@@ -135,7 +155,10 @@ class PostListVC: UIViewController {
 //MARK: - UITableViewDataSource
 extension PostListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return APIManager.livePosts.count;
+        var quantity = 0
+        if showingDefaultPosts { quantity = APIManager.defaultPosts.count }
+        else { quantity = APIManager.livePosts.count }
+        return quantity;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -153,17 +176,19 @@ extension PostListVC: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 extension PostListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        APIManager.lastCelectedPosition = indexPath.row
+        if showingDefaultPosts { APIManager.lastCelectedPost = APIManager.defaultPosts[indexPath.row]}
+        else { APIManager.lastCelectedPost = APIManager.livePosts[indexPath.row] }
         self.performSegue(withIdentifier: Const.detailsSegueID, sender: nil)
     }
     
+    //If couple posts to bottom left, load new posts and update page
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset_Y = scrollView.contentOffset.y
         let height = scrollView.contentSize.height
         
-        if offset_Y >= height - 330*4 && !loadingNewPosts {
+        if offset_Y >= height - 330*4 && !currentlyLoadingNewPosts && !showingDefaultPosts {
             Task {
-                await loadNextPage()
+                await loadNewPage()
             }
         }
     }

@@ -22,39 +22,95 @@ class PostDetailsVC: UIViewController {
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
     }
     
     //MARK: - Variables
     private var isSaved: Bool = false
-    private var position: Int = 0
+    private var showingDefaultPosts: Bool = true
+    private var livePosition: Int = 0
+    private var defaultPosition: Int?
     
     //MARK: - Actions
     @IBAction func bookmarkButtonPressed(_ sender: UIButton) {
-        if self.isSaved {
-            bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
-            isSaved = false
+        //Buton image handling
+        if isSaved { bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal) }
+        else { bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal) }
+        isSaved.toggle()
+        
+        APIManager.livePosts[livePosition].saved = isSaved
+        if showingDefaultPosts {
+            if isSaved {
+                //Adding post to default array
+                APIManager.defaultPosts.append(APIManager.livePosts[livePosition])
+                let lastDefaultPosition = APIManager.defaultPosts.count - 1
+                //Update value of its position to both live and default arrays
+                APIManager.livePosts[livePosition].defaultPosition = lastDefaultPosition
+                APIManager.defaultPosts[lastDefaultPosition].defaultPosition = lastDefaultPosition
+            } else {
+                //Removing post from default array
+                APIManager.defaultPosts = removeAndShift(defaultPosition ?? 0)
+                //Updating live position for live only since default was removed
+                APIManager.livePosts[livePosition].defaultPosition = nil
+            }
         } else {
-            bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
-            isSaved = true
+            if isSaved {
+                //Adding post to default array
+                APIManager.defaultPosts.append(APIManager.livePosts[livePosition])
+                let lastDefaultPosition = APIManager.defaultPosts.count - 1
+                //Update value of its position to both live and default arrays
+                APIManager.livePosts[livePosition].defaultPosition = lastDefaultPosition
+                APIManager.defaultPosts[lastDefaultPosition].defaultPosition = lastDefaultPosition
+            } else {
+                //Removing post from default array
+                APIManager.defaultPosts = removeAndShift(defaultPosition ?? 0)
+                //Updating live position for live only since default was removed
+                APIManager.livePosts[livePosition].defaultPosition = nil
+            }
+            
+            for post in APIManager.defaultPosts {
+                print("\(post.livePosition) : \(post.defaultPosition)")
+            }
         }
-        print(APIManager.livePosts[position].title)
-        APIManager.livePosts[position].saved = isSaved
     }
     
+    //Copying link to currentPost via UIActivityController
     @IBAction func shareButtonPressed(_ sender: UIButton) {
-        let permalink = "reddit.com\(APIManager.livePosts[position].permalink)"
+        var permalink = String()
+        if showingDefaultPosts { permalink = "reddit.com\(APIManager.defaultPosts[livePosition].permalink)" }
+        else { permalink = "reddit.com\(APIManager.livePosts[livePosition].permalink)" }
         let activityViewController = UIActivityViewController(activityItems: [permalink as Any], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
     }
 }
 
+//MARK: - Util functions
+extension PostDetailsVC {
+    func removeAndShift(_ index: Int) -> [APIManager.RedditPost]{
+        var editedPosts = APIManager.defaultPosts
+        guard index >= 0 && index < APIManager.defaultPosts.count else { return [] }
+        editedPosts.remove(at: index)
+        
+        if index < editedPosts.count {
+            editedPosts = Array(editedPosts[..<index]) + Array(editedPosts[index...])
+        }
+        for i in 0..<editedPosts.count {
+            if editedPosts[i].defaultPosition != i { editedPosts[i].defaultPosition = i }
+        }
+        return editedPosts
+    }
+}
+
 //MARK: - UI management
 extension PostDetailsVC {
-    func adjustUIInfo(using position: Int?) {
-        let post = APIManager.livePosts[position ?? 0]
-        isSaved = post.saved
-        self.position = position ?? 0
+    func adjustUIInfo(using post: APIManager.RedditPost,_ showingDefaultPosts: Bool) {
+        //Variables transfered
+        self.isSaved = post.saved
+        self.showingDefaultPosts = showingDefaultPosts
+        self.livePosition = post.livePosition ?? 0
+        self.defaultPosition = post.defaultPosition
         
+        //Distributing post parameters to separately configure ui elements
         adjustDataLabel(post.author_fullname, post.created_utc, post.domain)
         adjustTitleLabel(post.title)
         adjustRatingLabel(post.ups, post.downs)

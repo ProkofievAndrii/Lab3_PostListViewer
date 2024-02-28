@@ -9,10 +9,14 @@ import Foundation
 
 class APIManager {
     
+    //MARK: - Variables
+    static var apiManager = APIManager()
+    
     static var livePosts: [RedditPost] = []
     static var defaultPosts: [RedditPost] = []
-    static var lastCelectedPosition: Int?
+    static var lastCelectedPost: RedditPost? = nil
     
+    //MARK: - API structures
     struct RedditResponse: Codable {
         let kind: String
         let data: RedditData
@@ -38,14 +42,17 @@ class APIManager {
         let num_comments: Int
         let url_overridden_by_dest: URL?
         let permalink: String
+        
+        //Position of post in live/default array
+        var livePosition: Int?
+        var defaultPosition: Int?
     }
     
+    //MARK: - Inner request
     func fetchData(_ subreddit: String, _ limit: Int, _ after: String?, completion: @escaping ([RedditPost]?) -> Void) {
         var urlString = "https://www.reddit.com/r/\(subreddit)/top.json?limit=\(limit)"
         
-        if let after = after {
-            urlString += "&after=\(after)"
-        }
+        if let after = after { urlString += "&after=\(after)" }
         
         guard let url = URL(string: urlString) else {
             completion(nil)
@@ -77,5 +84,11 @@ class APIManager {
         }.resume()
     }
     
-    static var apiManager = APIManager()
+    //API request
+    static func loadNewPosts(_ subreddit: String,_ limit: Int,_ after: String?) {
+        apiManager.fetchData(subreddit, limit, after) { posts in
+            if let posts = posts { APIManager.livePosts.append(contentsOf: posts) }
+            else { print("Failed to fetch posts") }
+        }
+    }
 }
