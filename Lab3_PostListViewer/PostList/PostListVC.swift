@@ -12,6 +12,8 @@ class PostListVC: UIViewController {
     //MARK: - Outlets
     @IBOutlet private weak var postTableView: UITableView!
     @IBOutlet private weak var bookmarkFilterButton: UIBarButtonItem!
+    @IBOutlet private weak var searchBar: UISearchBar!
+    private var tableHeaderView: UIView?
     
     //MARK: - Constants and parameters
     
@@ -36,7 +38,8 @@ class PostListVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configTableView()
-//        UserDefaultsManager.loadDefaultPosts()
+        configSearchBar()
+        UserDefaultsManager.loadDefaultPosts()
         APIManager.loadNewPosts(APIParams.subreddit, APIParams.limit, APIParams.after)
     }
     
@@ -47,13 +50,11 @@ class PostListVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        UserDefaultsManager.saveDefaultPosts()
     }
     
     //MARK: - Actions
     @IBAction func filterButtonPressed(_ sender: Any) {
         guard !currentlyLoadingNewPosts else { return }
-        
         //Filter button image updates
         if showingDefaultPosts {
             bookmarkFilterButton.image = UIImage(systemName: "bookmark")
@@ -62,6 +63,7 @@ class PostListVC: UIViewController {
             bookmarkFilterButton.image = UIImage(systemName: "bookmark.fill")
             showingDefaultPosts = true
         }
+        updateSearchBar()
         //Reloading table view using dufferent data array
         postTableView.reloadData()
     }
@@ -90,8 +92,19 @@ class PostListVC: UIViewController {
         default: break
         }
     }
-    
-    //MARK: - Table/Cell configuration functions
+}
+
+//MARK: - SearchBar config functions
+extension PostListVC {
+    private func configSearchBar() {
+        searchBar.delegate = self
+        searchBar.isHidden = !showingDefaultPosts
+        tableHeaderView = postTableView.tableHeaderView
+    }
+}
+
+//MARK: - Table/Cell config functions
+extension PostListVC {
     private func configTableView() {
         postTableView.dataSource = self
         postTableView.delegate = self
@@ -102,7 +115,7 @@ class PostListVC: UIViewController {
     private func configureDefaultCell(_ cell: PostViewCell) -> PostViewCell {
         let placeholderText = "Loading.."
         cell.dataLabel.text = placeholderText
-        cell.dataLabel.text = placeholderText
+        cell.titleLabel.text = placeholderText
         cell.ratingLabel.text = placeholderText
         cell.commentLabel.text = placeholderText
         cell.postImageView.image = UIImage(named: "image_placeholder")
@@ -139,8 +152,25 @@ class PostListVC: UIViewController {
         } else { cell.postImageView.image = UIImage(named: "image_placeholder") }
         return cell;
     }
+}
+
+//MARK: - Util functions
+extension PostListVC {
+    private func updateSearchBar() {
+        searchBar.isHidden = !showingDefaultPosts
+        if let headerView = tableHeaderView {
+            postTableView.tableHeaderView = showingDefaultPosts ? headerView : UIView(frame: CGRect(x: 0, y: 0, width: postTableView.bounds.width, height: 0))
+        }
+    }
     
-    //Util function to format post date
+    private func filterSavedPosts(_ searchText: String) {
+        APIManager.defaultPosts = searchText.isEmpty ?
+        APIManager.defaultPostsCopy : APIManager.defaultPosts.filter { post in
+            return post.title.lowercased().contains(searchText.lowercased())
+        }
+        postTableView.reloadData()
+    }
+    
     private func configureCorrectDate(interval: TimeInterval) -> String{
         let currentDate = Date()
         let timePassedSincePosted = currentDate.addingTimeInterval(-interval)
@@ -149,6 +179,13 @@ class PostListVC: UIViewController {
         dateFormatter.timeZone = TimeZone.current
         let formattedDate = dateFormatter.string(from: timePassedSincePosted)
         return "\(formattedDate)"
+    }
+}
+
+//MARK: - UISearchBarDelegate
+extension PostListVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filterSavedPosts(searchText)
     }
 }
 
@@ -167,8 +204,15 @@ extension PostListVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = postTableView.dequeueReusableCell(withIdentifier: Const.cellReuseId, for: indexPath) as! PostViewCell
-        if APIManager.livePosts.isEmpty { cell = configureDefaultCell(cell) }
-        else { cell = configureCompleteCell(cell, row: indexPath.row) }
+        
+        if showingDefaultPosts {
+            if APIManager.defaultPosts.isEmpty { cell = configureDefaultCell(cell) }
+            else { cell = configureCompleteCell(cell, row: indexPath.row) }
+        } else {
+            if APIManager.livePosts.isEmpty { cell = configureDefaultCell(cell) }
+            else { cell = configureCompleteCell(cell, row: indexPath.row) }
+        }
+        
         return cell;
     }
 }

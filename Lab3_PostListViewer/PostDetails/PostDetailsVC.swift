@@ -22,8 +22,13 @@ class PostDetailsVC: UIViewController {
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UserDefaultsManager.saveDefaultPosts()
+    }
+
     
     //MARK: - Variables
     private var isSaved: Bool = false
@@ -34,8 +39,7 @@ class PostDetailsVC: UIViewController {
     //MARK: - Actions
     @IBAction func bookmarkButtonPressed(_ sender: UIButton) {
         //Buton image handling
-        if isSaved { bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal) }
-        else { bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal) }
+        bookmarkButton.setImage(UIImage(systemName: isSaved ? "bookmark" : "bookmark.fill"), for: .normal)
         isSaved.toggle()
         
         APIManager.livePosts[livePosition].saved = isSaved
@@ -67,18 +71,14 @@ class PostDetailsVC: UIViewController {
                 //Updating live position for live only since default was removed
                 APIManager.livePosts[livePosition].defaultPosition = nil
             }
-            
-            for post in APIManager.defaultPosts {
-                print("\(post.livePosition) : \(post.defaultPosition)")
-            }
         }
+        APIManager.defaultPostsCopy = APIManager.defaultPosts
+        UserDefaultsManager.saveDefaultPosts()
     }
     
     //Copying link to currentPost via UIActivityController
     @IBAction func shareButtonPressed(_ sender: UIButton) {
-        var permalink = String()
-        if showingDefaultPosts { permalink = "reddit.com\(APIManager.defaultPosts[livePosition].permalink)" }
-        else { permalink = "reddit.com\(APIManager.livePosts[livePosition].permalink)" }
+        let permalink = "reddit.com\(isSaved ? APIManager.defaultPosts[livePosition].permalink : APIManager.livePosts[livePosition].permalink)"
         let activityViewController = UIActivityViewController(activityItems: [permalink as Any], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
     }

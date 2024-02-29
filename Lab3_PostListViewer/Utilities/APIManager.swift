@@ -14,6 +14,7 @@ class APIManager {
     
     static var livePosts: [RedditPost] = []
     static var defaultPosts: [RedditPost] = []
+    static var defaultPostsCopy: [RedditPost] = []
     static var lastCelectedPost: RedditPost? = nil
     
     //MARK: - API structures
@@ -84,10 +85,26 @@ class APIManager {
         }.resume()
     }
     
-    //API request
+    //MARK: - Static request function
     static func loadNewPosts(_ subreddit: String,_ limit: Int,_ after: String?) {
         apiManager.fetchData(subreddit, limit, after) { posts in
-            if let posts = posts { APIManager.livePosts.append(contentsOf: posts) }
+            if var posts = posts {
+                //Checking for connected default posts to update live posts
+                for i in 0..<posts.count {
+                    let livePost = posts[i]
+                    for defaultPost in defaultPosts {
+                        if livePost.title == defaultPost.title
+                            && livePost.author_fullname == defaultPost.author_fullname
+                            && livePost.created_utc == defaultPost.created_utc {
+                            
+                            var newLivePost = defaultPost
+                            newLivePost.defaultPosition = defaultPost.defaultPosition
+                            posts[i] = newLivePost
+                        }
+                    }
+                }
+                APIManager.livePosts.append(contentsOf: posts)
+            }
             else { print("Failed to fetch posts") }
         }
     }
