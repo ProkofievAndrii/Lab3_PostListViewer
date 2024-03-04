@@ -85,10 +85,7 @@ class PostListVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case Const.detailsSegueID:
-            let nextVC = segue.destination as! PostDetailsVC
-            DispatchQueue.main.async {
-                nextVC.adjustUIInfo(using: APIManager.lastCelectedPost!, self.showingDefaultPosts)
-            }
+            _ = segue.destination as! PostDetailsVC
         default: break
         }
     }

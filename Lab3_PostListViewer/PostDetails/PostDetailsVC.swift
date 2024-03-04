@@ -11,6 +11,7 @@ import SDWebImage
 class PostDetailsVC: UIViewController {
 
     //MARK: - IBOutlets
+    @IBOutlet private weak var postView: UIView!
     @IBOutlet private weak var dataLabel: UILabel!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var bookmarkButton: UIButton!
@@ -21,6 +22,8 @@ class PostDetailsVC: UIViewController {
     
     //MARK: - Life cycle
     override func viewDidLoad() {
+        configGestureRecognizer()
+        adjustUIInfo(using: APIManager.lastCelectedPost!, self.showingDefaultPosts)
         super.viewDidLoad()
     }
     
@@ -39,7 +42,9 @@ class PostDetailsVC: UIViewController {
     //MARK: - Actions
     @IBAction func bookmarkButtonPressed(_ sender: UIButton) {
         //Buton image handling
-        bookmarkButton.setImage(UIImage(systemName: isSaved ? "bookmark" : "bookmark.fill"), for: .normal)
+        bookmarkButton.setImage(UIImage(
+            systemName: isSaved ? "bookmark" : "bookmark.fill"),
+            for: .normal)
         isSaved.toggle()
         
         APIManager.livePosts[livePosition].saved = isSaved
@@ -103,6 +108,82 @@ extension PostDetailsVC {
 
 //MARK: - UI management
 extension PostDetailsVC {
+    
+//    private func configBookmarkAnimationView() {
+//        let bookmarkAnimationView = UIView(frame: postView.frame)
+//        bookmarkAnimationView.backgroundColor = .clear
+//
+//        let imageSize: CGFloat = 100
+//        let bookmarkImage = UIImageView(image: UIImage(
+//            systemName: isSaved ? "bookmark" : "bookmark.fill"))
+//        bookmarkImage.frame = CGRect(
+//            x: (postView.bounds.width - imageSize) / 2,
+//            y: (postView.bounds.height - imageSize) / 2,
+//            width: imageSize, height: imageSize)
+//        bookmarkAnimationView.addSubview(bookmarkImage)
+//        view.addSubview(bookmarkAnimationView)
+//        UIView.animate(withDuration: 0.75, animations: {
+//            bookmarkAnimationView.alpha = 0.0
+//        }) { _ in
+//            bookmarkAnimationView.removeFromSuperview()
+//        }
+//    }
+    
+    private func configBookmarkAnimationView() {
+        let bookmarkPathView = UIView(frame: postView.frame)
+        bookmarkPathView.backgroundColor = .clear
+
+        let imageWidth: CGFloat = 60
+        let imageHeight: CGFloat = 100
+        let cornerRadius: CGFloat = 8.0
+
+        // Create a UIBezierPath for the bookmark shape
+        let bookmarkPath = UIBezierPath()
+        bookmarkPath.move(to: CGPoint(x: (postView.bounds.width - imageWidth) / 2,
+                                      y: (postView.bounds.height - imageHeight) / 2))
+        bookmarkPath.addLine(to: CGPoint(x: (postView.bounds.width - imageWidth) / 2 + imageWidth,
+                                         y: (postView.bounds.height - imageHeight) / 2))
+        bookmarkPath.addLine(to: CGPoint(x: (postView.bounds.width - imageWidth) / 2 + imageWidth,
+                                         y: (postView.bounds.height - imageHeight) / 2 + imageHeight))
+        bookmarkPath.addLine(to: CGPoint(x: postView.bounds.width / 2,
+                                         y: (postView.bounds.height - imageHeight) / 2 + (imageHeight / 3 * 2)))
+        bookmarkPath.addLine(to: CGPoint(x: (postView.bounds.width - imageWidth) / 2,
+                                         y: (postView.bounds.height - imageHeight) / 2 + imageHeight))
+        bookmarkPath.close()
+
+        let bookmarkShapeLayer = CAShapeLayer()
+        bookmarkShapeLayer.path = bookmarkPath.cgPath
+        bookmarkShapeLayer.fillColor = isSaved ? UIColor.clear.cgColor :UIColor.systemBlue.cgColor
+        bookmarkShapeLayer.strokeColor = UIColor.systemBlue.cgColor
+        bookmarkShapeLayer.lineWidth = 4.0
+        bookmarkShapeLayer.lineJoin = .round
+        
+        bookmarkPathView.layer.addSublayer(bookmarkShapeLayer)
+        view.addSubview(bookmarkPathView)
+
+        UIView.animate(withDuration: 0.6, delay: 0.15, animations: {
+            bookmarkPathView.alpha = 0.0
+        }, completion: { _ in
+            bookmarkPathView.removeFromSuperview()
+        })
+    }
+
+
+    
+    func configGestureRecognizer() {
+        let doubleTapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleDoubleTapOnImage))
+        doubleTapGesture.numberOfTapsRequired = 2
+        postImageView.addGestureRecognizer(doubleTapGesture)
+        postImageView.isUserInteractionEnabled = true
+    }
+    
+    @objc func handleDoubleTapOnImage() {
+        configBookmarkAnimationView()
+        bookmarkButtonPressed(bookmarkButton)
+    }
+    
     func adjustUIInfo(using post: APIManager.RedditPost,_ showingDefaultPosts: Bool) {
         //Variables transfered
         self.isSaved = post.saved

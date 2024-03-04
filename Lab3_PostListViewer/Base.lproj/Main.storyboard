@@ -234,6 +234,7 @@
                         <outlet property="commentsLabel" destination="1i4-va-uWg" id="K6o-8E-3gL"/>
                         <outlet property="dataLabel" destination="084-R9-cL2" id="WPN-gY-Yxz"/>
                         <outlet property="postImageView" destination="6nI-rt-9vj" id="Hlk-qm-QJZ"/>
+                        <outlet property="postView" destination="Zat-yV-HTg" id="UL2-tx-B7W"/>
                         <outlet property="ratingLabel" destination="k0U-cX-j3h" id="eQA-Em-SA4"/>
                         <outlet property="shareButton" destination="k5C-jD-3ev" id="MwI-JP-3kk"/>
                         <outlet property="titleLabel" destination="4HV-tn-tGc" id="NRt-Y3-UGc"/>
